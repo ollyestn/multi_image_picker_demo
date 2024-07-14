@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 
 import 'image_provider.dart';
+import 'image_preview.dart';
 
 class ImageSelectorPage extends StatefulWidget {
   @override
@@ -94,41 +95,56 @@ class ImageGridItem extends StatelessWidget {
           final file = snapshot.data!;
           return GestureDetector(
             onTap: () {
-              final selectedImagesProvider = Provider.of<SelectedImagesProvider>(context, listen: false);
-              if (selectedImagesProvider.selectedImages.contains(file)) {
-                selectedImagesProvider.removeImage(file);
-              } else if (selectedImagesProvider.selectedImages.length < 9) {
-                selectedImagesProvider.addImage(file);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("You can select up to 9 images only")),
-                );
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImagePreviewPage(imageFile: file),
+                ),
+              );
             },
             child: Stack(
               children: [
                 Image.file(file, fit: BoxFit.cover),
-                Consumer<SelectedImagesProvider>(
-                  builder: (context, selectedImagesProvider, child) {
-                    bool isSelected = selectedImagesProvider.selectedImages.contains(file);
-                    return Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        color: isSelected ? Colors.blue.withOpacity(0.5) : Colors.transparent,
-                        child: isSelected
-                            ? CircleAvatar(
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      final selectedImagesProvider = Provider.of<SelectedImagesProvider>(context, listen: false);
+                      if (selectedImagesProvider.selectedImages.contains(file)) {
+                        selectedImagesProvider.removeImage(file);
+                      } else if (selectedImagesProvider.selectedImages.length < 9) {
+                        selectedImagesProvider.addImage(file);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("You can select up to 9 images only")),
+                        );
+                      }
+                    },
+                    child: Consumer<SelectedImagesProvider>(
+                      builder: (context, selectedImagesProvider, child) {
+                        bool isSelected = selectedImagesProvider.selectedImages.contains(file);
+                        int index = selectedImagesProvider.getImageIndex(file);
+                        return CircleAvatar(
                           radius: 12,
-                          backgroundColor: Colors.blue,
-                          child: Text(
-                            selectedImagesProvider.getImageIndex(file).toString(),
+                          backgroundColor: isSelected ? Colors.blue : Colors.white,
+                          child: isSelected
+                              ? Text(
+                            index.toString(),
                             style: TextStyle(color: Colors.white),
+                          )
+                              : Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey),
+                            ),
                           ),
-                        )
-                            : Container(),
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
