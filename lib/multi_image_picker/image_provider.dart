@@ -24,4 +24,9 @@ class SelectedImagesProvider with ChangeNotifier {
   int getImageIndex(File image) {
     return _selectedImages.indexOf(image) + 1;
   }
+
+  void clear() {
+    _selectedImages.clear();
+    notifyListeners();
+  }
 }

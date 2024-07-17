@@ -7,7 +7,7 @@ import 'image_provider.dart';
 class ImagePreviewPage extends StatefulWidget {
   final File imageFile;
 
-  ImagePreviewPage({required this.imageFile});
+  const ImagePreviewPage({super.key, required this.imageFile});
 
   @override
   _ImagePreviewPageState createState() => _ImagePreviewPageState();
@@ -34,18 +34,20 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
             child: Center(
               child: PhotoView(
                 imageProvider: FileImage(widget.imageFile),
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 3,
               ),
             ),
           ),
           AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             top: _showAppBar ? 0 : -60,
             left: 0,
             right: 0,
             child: PreferredSize(
-              preferredSize: Size.fromHeight(60.0),
+              preferredSize: const Size.fromHeight(60.0),
               child: AppBar(
-                title: Text(''),
+                title: const Text(''),
                 actions: [
                   GestureDetector(
                     onTap: () {
@@ -55,7 +57,7 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
                         selectedImagesProvider.addImage(widget.imageFile);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("You can select up to 9 images only")),
+                          const SnackBar(content: Text("You can select up to 9 images only")),
                         );
                       }
                     },
@@ -65,7 +67,7 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
                       child: isSelected
                           ? Text(
                         index.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       )
                           : Container(
                         width: 24,
@@ -77,7 +79,7 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                 ],
               ),
             ),

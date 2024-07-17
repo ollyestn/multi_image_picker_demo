@@ -48,6 +48,12 @@ class _ImageSelectorPageState extends State<ImageSelectorPage> {
     }
   }
 
+  void _completeSelection() {
+    final selectedImagesProvider = Provider.of<SelectedImagesProvider>(context, listen: false);
+    final selectedImages = selectedImagesProvider.selectedImages;
+    Navigator.pop(context, selectedImages.map((file) => file.path).toList());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,13 +62,9 @@ class _ImageSelectorPageState extends State<ImageSelectorPage> {
       ),
       body: Column(
         children: <Widget>[
-          ElevatedButton(
-            onPressed: _pickImageFromCamera,
-            child: Text("Pick image from camera"),
-          ),
           Expanded(
             child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
@@ -75,7 +77,35 @@ class _ImageSelectorPageState extends State<ImageSelectorPage> {
               },
             ),
           ),
+          Container(
+            color: Colors.grey[200],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    // Add preview functionality
+                  },
+                  child: Text("预览"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Add video creation functionality
+                  },
+                  child: Text("制作视频"),
+                ),
+                TextButton(
+                  onPressed: _completeSelection,
+                  child: Text("完成"),
+                ),
+              ],
+            ),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _pickImageFromCamera,
+        child: Icon(Icons.camera_alt),
       ),
     );
   }

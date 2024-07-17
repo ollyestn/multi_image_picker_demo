@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'image_provider.dart';
-import 'image_selector.dart';
+import 'multi_image_picker/image_provider.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,10 +16,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Multi Image Picker Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: ImageSelectorPage(),
+        theme: ThemeData(          primarySwatch: Colors.blue,        ),
+        home: HomePage(),
       ),
     );
   }
